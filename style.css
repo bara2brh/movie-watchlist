@@ -48,10 +48,18 @@ main {
     font-size: 0.9rem;
     font-weight: 500;
     padding: 1rem;
+    padding-inline: 2.5rem;
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
-}
 
+}
+.search-icon{
+    width: 15px;
+    height: 15px;
+    opacity: 0.5;
+    position: relative;
+    left: 30px;
+}
 #search:focus {
     outline: none;
 }
@@ -87,6 +95,7 @@ main {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    width: 90%;
     height: 70vh;
 }
 
@@ -99,11 +108,13 @@ main {
 .film {
     display: flex;
     justify-content: center;
+    align-items: center;
     padding: 2rem 4rem;
     border-bottom: 1px solid #2C2C2C;
     width: 90%;
-    
+
 }
+
 
 .film-info {
     margin-left: 20px;
@@ -119,18 +130,23 @@ main {
     align-items: center;
     gap: 0.5rem;
     height: 20px;
+    font-size: 14px;
 }
 
 .film-title h3 {
     font-size: 1.25rem;
     font-weight: 500;
-    
+
 }
 
 .film-details {
     display: flex;
     gap: 1.85rem;
 }
+.film-details p {
+    font-size: 0.80rem;
+}
+
 .film-details button {
     background-color: transparent;
     display: flex;
@@ -141,12 +157,14 @@ main {
     gap: 0.35rem;
     cursor: pointer;
 }
+
 .add-icon {
     width: 20px;
     height: 20px;
-    
+
 }
-.film-desc{
+
+.film-desc {
     margin: 0;
     color: #A5A5A5;
     width: 350px;
