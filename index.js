@@ -37,22 +37,24 @@ async function fetchResults(searchQuery){
     // its a free apikey 
    const response = await fetch(`https://www.omdbapi.com/?s=${searchQuery}&type=movie&apikey=4fd5fb45`);
     const data = await response.json();
+    if(data.Response=="True"){
+        for (const film of data.Search) {
+                const detailsResponse = await fetch(`https://www.omdbapi.com/?i=${film.imdbID}&apikey=4fd5fb45`);
+                const details = await detailsResponse.json();
 
-    for (const film of data.Search) {
-        const detailsResponse = await fetch(`https://www.omdbapi.com/?i=${film.imdbID}&apikey=4fd5fb45`);
-        const details = await detailsResponse.json();
-
-        filmList.push({
-            title: film.Title,
-            poster: film.Poster,
-            rate: details.imdbRating,
-            length: details.Runtime,
-            Genre: details.Genre,
-            desc: details.Plot
-        });
+                filmList.push({
+                    title: film.Title,
+                    poster: film.Poster,
+                    rate: details.imdbRating,
+                    length: details.Runtime,
+                    Genre: details.Genre,
+                    desc: details.Plot
+                });
+            }
+            return filmList;
     }
-
-    return filmList;
+    return null
+    
 }
 
 function renderFilms(filmList){
@@ -92,5 +94,9 @@ function renderFilms(filmList){
 searchBtn.addEventListener('click',async()=>{
     const searchQuery = searchInpt.value;
     const list = await fetchResults(searchQuery);
-    await renderFilms(list);
+    if(list){
+        await renderFilms(list);
+    }else {
+        filmContainer.innerHTML = `<h2 style="color:white; width:80%">Unable to find what you’re looking for.<br> Please try another search.</h2>`
+    }
 })
