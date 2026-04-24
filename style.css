@@ -96,7 +96,7 @@ main {
     justify-content: center;
     flex-direction: column;
     width: 90%;
-    height: 70vh;
+    min-height: 70vh;
 }
 
 .film-list h2 {
@@ -112,6 +112,8 @@ main {
     padding: 2rem 4rem;
     border-bottom: 1px solid #2C2C2C;
     width: 90%;
+    
+    
 
 }
 
@@ -131,11 +133,16 @@ main {
     gap: 0.5rem;
     height: 20px;
     font-size: 14px;
+    
 }
 
 .film-title h3 {
     font-size: 1.25rem;
     font-weight: 500;
+     overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
 
 }
 
@@ -169,4 +176,8 @@ main {
     color: #A5A5A5;
     width: 350px;
     line-height: 1.3;
+}
+
+.poster-img{
+    width: 200px;
 }
