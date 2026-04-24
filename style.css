@@ -1,38 +1,45 @@
-*{
+* {
     box-sizing: border-box;
     font-family: "Inter", sans-serif;
 
 }
-html,body{
+
+html,
+body {
     padding: 0;
     margin: auto;
     width: 700px;
     background-color: #1c1c1c;
     color: white;
 }
-header{
+
+header {
     background: url('images/header.png');
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 2.25rem;
 }
-a{
+
+a {
     text-decoration: none;
     color: white;
     font-weight: bold;
 }
-a:hover{
+
+a:hover {
     border-bottom: 1.5px solid white;
 }
-main{
+
+main {
     background-color: #121212;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
-#search{
+
+#search {
     background-color: #2e2e2f;
     border: none;
     color: #A5A5A5;
@@ -44,11 +51,12 @@ main{
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
 }
-#search:focus{
+
+#search:focus {
     outline: none;
 }
-.search-container
-{
+
+.search-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -56,7 +64,8 @@ main{
     position: relative;
     bottom: 20px;
 }
-#search-btn{
+
+#search-btn {
     height: 40px;
     background-color: #4B4B4B;
     color: white;
@@ -68,18 +77,78 @@ main{
     font-size: 0.9rem;
     cursor: pointer;
 }
-#search-btn:hover{
+
+#search-btn:hover {
     background-color: #5a5a5a;
 }
-.film-list{
+
+.film-list {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     height: 70vh;
 }
+
 .film-list h2 {
     margin-top: 5px;
     color: #2E2E2F;
 
+}
+
+.film {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 4rem;
+    border-bottom: 1px solid #2C2C2C;
+    width: 90%;
+    
+}
+
+.film-info {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+
+}
+
+.film-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 20px;
+}
+
+.film-title h3 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    
+}
+
+.film-details {
+    display: flex;
+    gap: 1.85rem;
+}
+.film-details button {
+    background-color: transparent;
+    display: flex;
+    color: white;
+    border: none;
+    font-weight: 500;
+    align-items: center;
+    gap: 0.35rem;
+    cursor: pointer;
+}
+.add-icon {
+    width: 20px;
+    height: 20px;
+    
+}
+.film-desc{
+    margin: 0;
+    color: #A5A5A5;
+    width: 350px;
+    line-height: 1.3;
 }
