@@ -25,42 +25,54 @@
 
 */
 
-// title , poster , rate , length, Genre, desc
+// title , poster , rate , length, genre, desc
 
-const searchInpt = document.getElementById('search');
-const searchBtn = document.getElementById('search-btn');
-const filmContainer = document.getElementById('film-list');
-const watchlistBtn = document.getElementById('watchlist-btn');
+const searchInpt = document.getElementById('search')
+const searchBtn = document.getElementById('search-btn')
+const filmContainer = document.getElementById('film-list')
+const watchlistBtn = document.getElementById('watchlist-btn')
 let filmList = []
+let watchList
 
 async function fetchResults(searchQuery) {
-    filmList = [];
-    // its a free apikey 
-    const response = await fetch(`https://www.omdbapi.com/?s=${searchQuery}&type=movie&apikey=4fd5fb45`);
-    const data = await response.json();
+
+    filmList = []
+
+    // its a free apikey - create your own key here : www.omdbapi.com
+    const response = await fetch(`https://www.omdbapi.com/?s=${searchQuery}&type=movie&apikey=4fd5fb45`)
+    const data = await response.json()
     if (data.Response == "True") {
         for (const film of data.Search) {
-            const detailsResponse = await fetch(`https://www.omdbapi.com/?i=${film.imdbID}&apikey=4fd5fb45`);
-            const details = await detailsResponse.json();
+            const detailsResponse = await fetch(`https://www.omdbapi.com/?i=${film.imdbID}&apikey=4fd5fb45`)
+            const details = await detailsResponse.json()
 
             filmList.push({
                 title: film.Title,
                 poster: film.Poster,
                 rate: details.imdbRating,
                 length: details.Runtime,
-                Genre: details.Genre,
+                genre: details.Genre,
                 desc: details.Plot,
-                id: film.imdbID
-            });
+                id: film.imdbID,
+                isWatchlist: isWatchlist(film.imdbID)
+            })
         }
-        return filmList;
+        return filmList
     }
     return null
 
 }
 
+function isWatchlist(filmId) {
+
+    watchList = localStorage.getItem('watchList')
+
+
+
+}
+
 function renderFilms(filmList) {
-    let html = '';
+    let html = ''
     for (let film of filmList) {
         html +=
             `
@@ -75,7 +87,7 @@ function renderFilms(filmList) {
                     </div>
                     <div class="film-details">
                         <p>${film.length}</p>
-                        <p>${film.Genre}</p>
+                        <p>${film.genre}</p>
                         <button id='watchlist-btn' data-film-id="${film.id}" ><img class="add-icon" src="images/add.png" alt="">
                             <p>Watchlist</p>
                         </button>
@@ -89,19 +101,67 @@ function renderFilms(filmList) {
 
         `
     }
-    filmContainer.innerHTML = html;
+    filmContainer.innerHTML = html
 }
 
-searchBtn.addEventListener('click', async () => {
-    const searchQuery = searchInpt.value;
-    const list = await fetchResults(searchQuery);
-    if (list) {
-        await renderFilms(list);
-    } else {
-        filmContainer.innerHTML = `<h2 style="color:white; width:80%">Unable to find what you’re looking for.<br> Please try another search.</h2>`
-    }
-})
 
-watchlistBtn.addEventListener('click',(e)=>{
+
+async function searchFilm(event) {
+    const searchQuery = searchInpt.value
+    const list = await fetchResults(searchQuery)
+    if (list) {
+        await renderFilms(list)
+    } else {
+        filmContainer.innerHTML = `<h2 style="color:white  width:80%">Unable to find what you’re looking for.<br> Please try another search.</h2>`
+    }
+
+}
+
+function addToWatchlist(event) {
+
+    watchList = localStorage.getItem('watchList')
+    const btn = event.target.closest('#watchlist-btn')
+    let newWatchlist = JSON.parse(watchList) ?? []
+    const selectedFilm = filmList.filter(film => {
+        return film.id == btn.dataset.filmId
+    })
+    newWatchlist.push(selectedFilm)
+    localStorage.setItem('watchList', JSON.stringify(newWatchlist))
+    btn.innerHTML = `
+    <img class="remove-icon" src="images/remove.png" alt="">
+                            <p>Remove</p>
+    `
+    btn.id = 'remove-btn'
+
+}
+
+function removeFilm(event) {
+
+    watchList = localStorage.getItem('watchList')
+    const btn = event.target.closest('#remove-btn')
+    watchList = watchList.filter((film => {
+        return film.id !== btn.dataset.filmId
+    }))
+    localStorage.setItem('watchList', JSON.stringify(watchList))
+    btn.innerHTML = `
+        <img class="add-icon" src="images/add.png" alt="">
+                                <p>Watchlist</p>
+        `
+    btn.id = 'add-btn'
+
+}
+
+
+document.addEventListener('click', (e) => {
+
+    if (e.target.closest('#watchlist-btn')) {
+        addToWatchlist(e)
+    }
+    if (e.target.closest('#search-btn')) {
+        searchFilm(e)
+    }
+    if (e.target.closest('#remove-btn')) {
+        removeFilm(e)
+    }
 
 })

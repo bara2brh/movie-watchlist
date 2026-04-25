@@ -165,7 +165,7 @@ main {
     cursor: pointer;
 }
 
-.add-icon {
+.add-icon,.remove-icon {
     width: 20px;
     height: 20px;
 
