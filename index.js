@@ -30,39 +30,40 @@
 const searchInpt = document.getElementById('search');
 const searchBtn = document.getElementById('search-btn');
 const filmContainer = document.getElementById('film-list');
+const watchlistBtn = document.getElementById('watchlist-btn');
+let filmList = []
 
-
-async function fetchResults(searchQuery){
-    let filmList = []
+async function fetchResults(searchQuery) {
+    filmList = [];
     // its a free apikey 
-   const response = await fetch(`https://www.omdbapi.com/?s=${searchQuery}&type=movie&apikey=4fd5fb45`);
+    const response = await fetch(`https://www.omdbapi.com/?s=${searchQuery}&type=movie&apikey=4fd5fb45`);
     const data = await response.json();
-    if(data.Response=="True"){
+    if (data.Response == "True") {
         for (const film of data.Search) {
-                const detailsResponse = await fetch(`https://www.omdbapi.com/?i=${film.imdbID}&apikey=4fd5fb45`);
-                const details = await detailsResponse.json();
+            const detailsResponse = await fetch(`https://www.omdbapi.com/?i=${film.imdbID}&apikey=4fd5fb45`);
+            const details = await detailsResponse.json();
 
-                filmList.push({
-                    title: film.Title,
-                    poster: film.Poster,
-                    rate: details.imdbRating,
-                    length: details.Runtime,
-                    Genre: details.Genre,
-                    desc: details.Plot
-                });
-            }
-            return filmList;
+            filmList.push({
+                title: film.Title,
+                poster: film.Poster,
+                rate: details.imdbRating,
+                length: details.Runtime,
+                Genre: details.Genre,
+                desc: details.Plot,
+                id: film.imdbID
+            });
+        }
+        return filmList;
     }
     return null
-    
+
 }
 
-function renderFilms(filmList){
-    let html='';
-    for(let film of filmList)
-    {
-        html+=
-        `
+function renderFilms(filmList) {
+    let html = '';
+    for (let film of filmList) {
+        html +=
+            `
          <div class="film">
                 <img class="poster-img" src="${film.poster}" alt="">
                 <div class="film-info">
@@ -75,7 +76,7 @@ function renderFilms(filmList){
                     <div class="film-details">
                         <p>${film.length}</p>
                         <p>${film.Genre}</p>
-                        <button><img class="add-icon" src="images/add.png" alt="">
+                        <button id='watchlist-btn' data-film-id="${film.id}" ><img class="add-icon" src="images/add.png" alt="">
                             <p>Watchlist</p>
                         </button>
                     </div>
@@ -91,12 +92,16 @@ function renderFilms(filmList){
     filmContainer.innerHTML = html;
 }
 
-searchBtn.addEventListener('click',async()=>{
+searchBtn.addEventListener('click', async () => {
     const searchQuery = searchInpt.value;
     const list = await fetchResults(searchQuery);
-    if(list){
+    if (list) {
         await renderFilms(list);
-    }else {
+    } else {
         filmContainer.innerHTML = `<h2 style="color:white; width:80%">Unable to find what you’re looking for.<br> Please try another search.</h2>`
     }
+})
+
+watchlistBtn.addEventListener('click',(e)=>{
+
 })
