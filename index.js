@@ -65,6 +65,9 @@ async function fetchResults(searchQuery) {
 }
 
 function isWatchlist(filmId) {
+    if (!localStorage.getItem('watchList')) {
+       localStorage.setItem('watchList','[]')
+    }
     const watchList = JSON.parse(localStorage.getItem('watchList') || '[]');
     return watchList.some(film => film.id === filmId);
 }
@@ -111,7 +114,9 @@ function renderFilms(filmList) {
 
 function renderWatchlist() {
     const watchList = JSON.parse(localStorage.getItem('watchList') || '[]');
-    let html = '';
+    if (watchList.length>0){
+        watchlistContainer.style.justifyContent = 'start'
+        let html = '';
     for (const film of watchList) {
         html +=
             `
@@ -149,8 +154,18 @@ function renderWatchlist() {
 
     }
 
-
-
+    }else{
+        watchlistContainer.style.justifyContent = 'center'
+        watchlistContainer.innerHTML= `
+          <h2>Your watchlist is looking a little empty...</h2>
+            <div class="empty">
+                <a href="/index.html">
+                    <img width="30" src="images/add.png" alt="">
+                    <h3>Let’s add some movies!</h3>
+                </a>
+        `
+    }
+   
 }
 
 async function searchFilm(event) {
@@ -166,7 +181,6 @@ async function searchFilm(event) {
 
 function addToWatchlist(event) {
 
-    console.log('addtowatch')
     const watchList = localStorage.getItem('watchList') || '[]';
     const btn = event.target.closest('#watchlist-btn')
     let newWatchlist = JSON.parse(watchList)
@@ -179,6 +193,7 @@ function addToWatchlist(event) {
                             <p>Remove</p>
     `
     btn.id = 'remove-btn'
+    renderWatchlist()
 
 }
 
@@ -187,13 +202,10 @@ function removeFilm(event) {
     const watchList = localStorage.getItem('watchList') || '[]';
     let newWatchlist = JSON.parse(watchList);
     const btn = event.target.closest('#remove-btn')
-    console.log(newWatchlist)
     newWatchlist = newWatchlist.filter((film => {
-        console.log(film.id)
-        console.log(btn.dataset.filmId)
+      
         return film.id != btn.dataset.filmId
     }))
-    console.log(newWatchlist)
     localStorage.setItem('watchList', JSON.stringify(newWatchlist))
     btn.innerHTML = `
         <img class="add-icon" src="images/add.png" alt="">
@@ -220,3 +232,9 @@ document.addEventListener('click', (e) => {
 
 })
 
+if (window.location.pathname === '/watchlist.html') {
+    document.addEventListener('DOMContentLoaded', () => {
+        renderWatchlist()
+        
+    });
+}
